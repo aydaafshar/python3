@@ -6,7 +6,7 @@
 #    By: ayda <ayda@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/31 12:37:48 by ayda              #+#    #+#              #
-#    Updated: 2025/12/31 13:05:54 by ayda             ###   ########.fr        #
+#    Updated: 2026/01/01 17:07:23 by ayda             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,11 @@ import sys
 import math
 
 def distance_3d(p1,p2):
-    return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2 + (p2[2] - p1[2]) ** 2)
+    return math.sqrt(
+        (p2[0] - p1[0]) ** 2
+        + (p2[1] - p1[1]) ** 2
+        + (p2[2] - p1[2]) ** 2
+    )
 
 def parse_cordinate(s):
     try:
@@ -28,30 +32,42 @@ def parse_cordinate(s):
         print(f"Error details - Type: {type(e).__name__}, Args: {e.args}")
         return None
     
-print("=== Game Coordinate System ===")
+def main():   
+    print("=== Game Coordinate System ===")
 
-origin = (0 ,0 ,0)
+    origin = (0 ,0 ,0)
 
-position = (10, 20, 5)
-print(f"\nPosition created: {position}")
-print(f"Distance between {origin} and {position}: "
-      f"{distance_3d(origin, position):.2f}")
+    position = (10, 20, 5)
 
-print('\nParsing coordinates: "3,4,0"')
-parsed = parse_cordinate("3,4,0")
-if parsed is not None:
-    print(f"Parsed position: {parsed}")
-    print(
-        f"Distance between {origin} and {parsed}: "
-        f"{distance_3d(origin, parsed)}"
+    if len(sys.argv) >= 2:
+        user_pos = parse_cordinate(sys.argv[1])
+        if user_pos is not None:
+            position = user_pos
+            
+    print(f"\nPosition created: {position}")
+    print(f"Distance between {origin} and {position}: "
+          f"{distance_3d(origin, position):.2f}"
+          
     )
 
-print('\nParsing invalid coordinates: "abc,def,ghi"')
-parse_cordinate("abc,def,ghi")
+    print('\nParsing coordinates: "3,4,0"')
+    parsed = parse_cordinate("3,4,0")
+    if parsed is not None:
+        print(f"Parsed position: {parsed}")
+        print(
+        f"Distance between {origin} and {parsed}: "
+        f"{distance_3d(origin, parsed)}"
+        )
 
-print("\nUnpacking demonstration:")
+    print('\nParsing invalid coordinates: "abc,def,ghi"')
+    parse_cordinate("abc,def,ghi")
 
-if parsed is not None:
-    x, y, z = parsed
-    print(f"Player at x={x}, y={y}, z={z}")
-    print(f"Coordinates: X={x}, Y={y}, Z={z}")
+    print("\nUnpacking demonstration:")
+
+    if parsed is not None:
+        x, y, z = parsed
+        print(f"Player at x={x}, y={y}, z={z}")
+        print(f"Coordinates: X={x}, Y={y}, Z={z}")
+
+if __name__ == "__main__":
+    main()
