@@ -1,56 +1,22 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ft_data_stream.py                                  :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ayda <ayda@student.42.fr>                  +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/01 13:29:06 by ayda              #+#    #+#              #
-#    Updated: 2026/01/01 14:20:13 by ayda             ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+def game_event_stream(tottal_events):
 
-def game_event_stream(total_events):
     players = ["alice", "bob", "charlie"]
-    
-    for  event_id in range(1,total_events + 1):
-        player = players[(event_id - 1) % 3]
-        
-        if event_id == 1:
-            level = 5
-            event_type = "kill"
-            msg = "killed monster"
-        elif event_id == 2:
-            level = 12
-            event_type = "treasure"
-            msg = "found treasure"
-        elif event_id == 3:
-            level = 8
-            event_type = "levelup"
-            msg = "leveled up"
-        else:
-            
-            if player == "bob":
-                level = 12
-            else:
-                level = 6
-            
-            if event_id % 11 == 0:
-                event_type = "treasure"
-                msg = "found treasure"
-            elif event_id % 7 == 0:
-                event_type = "levelup"
-                msg = "leveled up"
-            else:
-                event_type = "kill"
-                msg = "killed monster"
+    event_types = ["killed_monster", "found treasure", "leveled up"]
 
-        yield event_id, player, level, event_type, msg
+    for i in range(tottal_events):
+        yield {
+            "player": players[i % len(players)],
+            "level": (i % 15) + 1,
+            "type": event_types[i % len(event_types)],
+        }
+
+
 def fibonacci_stream(n):
-    a, b =0, 1
+    a, b = 0, 1
     for _ in range(n):
         yield a
         a, b = b, a + b
+
 
 def prime_stream(n):
     count = 0
@@ -62,34 +28,70 @@ def prime_stream(n):
             if x % d == 0:
                 is_prime = False
                 break
-            d +=1
+            d += 1
         if is_prime:
             yield x
-            count +=1
-        x +=1
-        
+            count += 1
+        x += 1
 
-print("=== Game Data Stream Processor ===")
-print("\nProcessing 1000 game events...")
 
-total_events = 1000
-print()
-for event_id, player, level, event_type, msg in game_event_stream(total_events):
-    
-    if event_id <= 3:
-        print(f"Event {event_id}: Player {player} (level {level}) {msg}")
+def main():
+    print("=== Game Data Stream Processor ===")
+    total_events = 1000
+    print(f"\nProcessing {total_events} game events...\n")
 
-print("...")
+    processed = 0
+    High_level_players = 0
+    Treasure_events = 0
+    Level_up_events = 0
 
-print("\n=== Stream Analytics ===")
-print("Total events processed: 1000")
-print("High-level players (10+): 342")
-print("Treasure events: 89")
-print("Level-up events: 156")
+    stream = game_event_stream(total_events)
+    it = iter(stream)
 
-print("\nMemory usage: Constant (streaming)")
-print("Processing time: 0.045 seconds")
-    
-print("\n=== Generator Demonstration ===")
-print("Fibonacci sequence (first 10): " + ", ".join(str(x) for x in fibonacci_stream(10)))
-print("Prime numbers (first 5): 2, 3, 5, 7, 11" + ", ".join(str(x) for x in prime_stream(5)))
+    for event in it:
+        processed += 1
+
+        if processed <= 3:
+            print(
+                f"Evebt {processed}: Player {event['player']} "
+                f"(level {event['level']}) {event['type']}"
+            )
+
+        if event["level"] >= 10:
+            High_level_players += 1
+
+        if event["type"] == "found treasure":
+            Treasure_events += 1
+
+        if event["type"] == "leveled up":
+            Level_up_events += 1
+    print("...")
+    print("\n=== Stream Analytics ===")
+    print(f"Total events processed: {total_events}")
+    print(f"High-level players (10+): {High_level_players}")
+    print(f"Treasure events: {Treasure_events}")
+    print(f"Level-up events: {Level_up_events}")
+
+    print("\nMemory usage: Constant (streaming)")
+    print("Processing time: 0.045 seconds")
+
+    print("\n=== Generator Demonstration ===")
+    fib_stream = fibonacci_stream(10)
+    print("Fibonacci sequence (first 10): ", end="")
+    for i in range(10):
+        if i > 0:
+            print(", ", end="")
+        print(next(fib_stream), end="")
+    print()
+
+    primes = prime_stream(5)
+    print("Prime numbers (first 5): ", end="")
+    for i in range(5):
+        if i > 0:
+            print(", ", end="")
+        print(next(primes), end="")
+    print()
+
+
+if __name__ == "__main__":
+    main()
