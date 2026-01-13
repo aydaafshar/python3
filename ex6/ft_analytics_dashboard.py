@@ -4,7 +4,8 @@ def main():
             "score": 2300,
             "active": True,
             "region": "north",
-            "achievements": ["first_kill", "level_10", "kkk", "speed_demon", "pvp_win"],
+            "achievements": ["first_kill", "level_10", "kkk", "speed_demon",
+                             "pvp_win"],
         },
         "bob": {
             "score": 1800,
@@ -95,7 +96,8 @@ def main():
     unique_achievements = set()
     for data in players.values():
         if data["active"] and data["score"] < 2000:
-            unique_achievements.update(data["achievements"])
+            for it in data["achievements"]:
+                unique_achievements.add(it)
 
     active_regions = set()
     for data in players.values():
@@ -138,7 +140,8 @@ def main():
     print("Total unique achievements:", total_unique_achievements)
     print("Average score:", average_score)
     print(
-        f"Top performer: {top_name} ({top_score} points, {top_achievements} achievements)"
+        f"Top performer: {top_name} ({top_score} points,"
+        f" {top_achievements} achievements)"
     )
 
 
