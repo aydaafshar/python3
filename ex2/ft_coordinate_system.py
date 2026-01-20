@@ -49,6 +49,10 @@ def main():
         f"Distance between {origin} and {position}: "
         f"{distance_3d(origin, position):.2f}"
     )
+    if position is not None:
+        x, y, z = position
+        print(f"Player at x={x}, y={y}, z={z}")
+        print(f"Coordinates: X={x}, Y={y}, Z={z}")
 
     print('\nParsing coordinates: "3,4,0"')
     parsed = parse_cordinate("3,4,0")
