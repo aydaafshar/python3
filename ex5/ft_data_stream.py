@@ -1,9 +1,9 @@
-def game_event_stream(tottal_events):
+def game_event_stream(total_events):
 
     players = ["alice", "bob", "charlie"]
-    event_types = ["killed_monster", "found treasure", "leveled up"]
+    event_types = ["killed monster", "found treasure", "leveled up"]
 
-    for i in range(tottal_events):
+    for i in range(total_events):
         yield {
             "player": players[i % len(players)],
             "level": (i % 15) + 1,
@@ -41,9 +41,9 @@ def main():
     print(f"\nProcessing {total_events} game events...\n")
 
     processed = 0
-    High_level_players = 0
-    Treasure_events = 0
-    Level_up_events = 0
+    high_level_players = 0
+    treasure_events = 0
+    level_up_events = 0
 
     stream = game_event_stream(total_events)
     it = iter(stream)
@@ -53,24 +53,24 @@ def main():
 
         if processed <= 3:
             print(
-                f"Evebt {processed}: Player {event['player']} "
+                f"Event {processed}: Player {event['player']} "
                 f"(level {event['level']}) {event['type']}"
             )
 
         if event["level"] >= 10:
-            High_level_players += 1
+            high_level_players += 1
 
         if event["type"] == "found treasure":
-            Treasure_events += 1
+            treasure_events += 1
 
         if event["type"] == "leveled up":
-            Level_up_events += 1
+            level_up_events += 1
     print("...")
     print("\n=== Stream Analytics ===")
     print(f"Total events processed: {total_events}")
-    print(f"High-level players (10+): {High_level_players}")
-    print(f"Treasure events: {Treasure_events}")
-    print(f"Level-up events: {Level_up_events}")
+    print(f"High-level players (10+): {high_level_players}")
+    print(f"Treasure events: {treasure_events}")
+    print(f"Level-up events: {level_up_events}")
 
     print("\nMemory usage: Constant (streaming)")
     print("Processing time: 0.045 seconds")

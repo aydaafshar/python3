@@ -4,8 +4,8 @@ def main():
             "score": 2300,
             "active": True,
             "region": "north",
-            "achievements": ["first_kill", "level_10", "kkk", "speed_demon",
-                             "pvp_win"],
+            "achievements": ["first_kill", "level_10", "kkk",
+                             "speed_demon", "pvp_win"],
         },
         "bob": {
             "score": 1800,
@@ -39,19 +39,12 @@ def main():
 
     print("\n=== List Comprehension Examples ===")
 
-    high_score = []
-    for name, data in players.items():
-        if data["score"] > 2000:
-            high_score.append(name)
+    high_score = [name for name,
+                  data in players.items() if data["score"] > 2000]
 
-    scores_doubled = []
-    for data in players.values():
-        scores_doubled.append(data["score"] * 2)
+    scores_doubled = [data["score"] * 2 for data in players.values()]
 
-    active_players = []
-    for name, data in players.items():
-        if data["active"]:
-            active_players.append(name)
+    active_players = [name for name, data in players.items() if data["active"]]
 
     print("High scorers (>2000):", high_score)
     print("Scores doubled:", scores_doubled)
@@ -59,10 +52,9 @@ def main():
 
     print("\n=== Dict Comprehension Examples ===")
 
-    player_scores = {}
-    for name, data in players.items():
-        if data["active"]:
-            player_scores[name] = data["score"]
+    player_scores = {
+        name: data["score"] for name, data in players.items() if data["active"]
+    }
 
     high = 0
     medium = 0
@@ -71,17 +63,18 @@ def main():
     for data in players.values():
         if data["score"] >= 2050:
             high += 1
-        if 1800 < data["score"] <= 2150:
+        elif data["score"] > 1800:
             medium += 1
-        if 1500 <= data["score"] <= 1800:
+        else:
             low += 1
 
     score_categories = {"high": high, "medium": medium, "low": low}
 
-    achievement_counts = {}
-    for name, data in players.items():
-        if data["active"]:
-            achievement_counts[name] = len(data["achievements"])
+    achievement_counts = {
+        name: len(data["achievements"])
+        for name, data in players.items()
+        if data["active"]
+    }
 
     print("Player scores:", player_scores)
     print("Score categories:", score_categories)
@@ -89,20 +82,17 @@ def main():
 
     print("\n=== Set Comprehension Examples ===")
 
-    unique_players = set()
-    for name in players.keys():
-        unique_players.add(name)
+    unique_players = {name for name in players.keys()}
 
-    unique_achievements = set()
-    for data in players.values():
-        if data["active"] and data["score"] < 2000:
-            for it in data["achievements"]:
-                unique_achievements.add(it)
+    unique_achievements = {
+        it
+        for data in players.values()
+        if data["active"] and data["score"] < 2000
+        for it in data["achievements"]
+    }
 
-    active_regions = set()
-    for data in players.values():
-        if data["active"]:
-            active_regions.add(data["region"])
+    active_regions = {data["region"]
+                      for data in players.values() if data["active"]}
 
     print("Unique players:", unique_players)
     print("Unique achievements:", unique_achievements)

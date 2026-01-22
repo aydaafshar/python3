@@ -140,7 +140,7 @@ def main():
 
         if most_value_amount is None or val > most_value_amount:
             most_value_amount = val
-            most_items_name = name
+            most_value_name = name
 
         if most_items_amount is None or cnt > most_items_amount:
             most_items_amount = cnt
